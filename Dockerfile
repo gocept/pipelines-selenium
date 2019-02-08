@@ -84,7 +84,7 @@ RUN mkdir $FIREFOX_DIR; \
     rm $FIREFOX_FILENAME
 
 
-RUN wget -N http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar -P ~/; \
+RUN wget -q -N http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar -P ~/; \
     mv -f ~/selenium-server-standalone-2.53.1.jar /usr/local/share/; \
     chmod +x /usr/local/share/selenium-server-standalone-2.53.1.jar; \
     ln -s /usr/local/share/selenium-server-standalone-2.53.1.jar /usr/local/bin/selenium-server-standalone-2.53.1.jar
@@ -96,8 +96,8 @@ RUN echo "#!/usr/bin/env bash" >> /usr/local/bin/selenium-server; \
 RUN pip install tox
 
 
-RUN echo "selenium-server &" >> /root/.bashrc; \
-    echo "Xvfb :99 -ac &" >> /root/.bashrc
+RUN echo "selenium-server >/dev/null 2>/dev/null &" >> /root/.bashrc; \
+    echo "Xvfb :99 -ac >/dev/null 2>/dev/null &" >> /root/.bashrc
 
 # Create dirs and users
 RUN mkdir -p /opt/atlassian/bitbucketci/agent/build \
