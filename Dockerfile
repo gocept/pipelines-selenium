@@ -72,10 +72,10 @@ ENV DISPLAY=:99
 # Set firefox version and installation directory through environment variables.
 # Prepend firefox dir to PATH
 ENV FIREFOX_VERSION=45.0 \
-    FIREFOX_DIR=/usr/bin/firefox \
+    FIREFOX_DIR=/usr/bin/firefox
+ENV FIREFOX_FILENAME=$FIREFOX_DIR/firefox.tar.bz2 \
     PATH=$FIREFOX_DIR:$PATH \
     GOCEPT_WEBDRIVER_FF_BINARY=$FIREFOX_DIR/firefox-bin
-ENV FIREFOX_FILENAME $FIREFOX_DIR/firefox.tar.bz2
 
 # Download the firefox of specified version from Mozilla and untar it.
 RUN mkdir $FIREFOX_DIR; \
