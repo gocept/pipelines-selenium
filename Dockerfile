@@ -1,8 +1,5 @@
 FROM ubuntu:16.04
 
-
-
-
 # Install base dependencies
 RUN apt-get update \
     && apt-get install -y \
@@ -60,7 +57,8 @@ RUN apt-get update \
         libxrender1 \
         libxt6  \
         lsb-release \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean -y
 
 # Default to UTF-8 file.encoding
 ENV LANG=C.UTF-8 \
@@ -72,34 +70,34 @@ ENV DISPLAY=:99
 
 
 # Set firefox version and installation directory through environment variables.
-ENV FIREFOX_VERSION 45.0
-ENV FIREFOX_DIR /usr/bin/firefox
+# Prepend firefox dir to PATH
+ENV FIREFOX_VERSION=45.0 \
+    FIREFOX_DIR=/usr/bin/firefox \
+    PATH=$FIREFOX_DIR:$PATH \
+    GOCEPT_WEBDRIVER_FF_BINARY=$FIREFOX_DIR/firefox-bin
 ENV FIREFOX_FILENAME $FIREFOX_DIR/firefox.tar.bz2
 
 # Download the firefox of specified version from Mozilla and untar it.
-RUN mkdir $FIREFOX_DIR
-RUN wget -q --continue --output-document $FIREFOX_FILENAME "https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2"
-RUN tar -xaf "$FIREFOX_FILENAME" --strip-components=1 --directory "$FIREFOX_DIR"
+RUN mkdir $FIREFOX_DIR; \
+    wget -q --continue --output-document $FIREFOX_FILENAME "https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2"; \
+    tar -xaf "$FIREFOX_FILENAME" --strip-components=1 --directory "$FIREFOX_DIR"; \
+    rm $FIREFOX_FILENAME
 
-# Prepend firefox dir to PATH
-ENV PATH $FIREFOX_DIR:$PATH
-ENV GOCEPT_WEBDRIVER_FF_BINARY $FIREFOX_DIR/firefox-bin
 
-RUN wget -N http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar -P ~/
+RUN wget -N http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar -P ~/; \
+    mv -f ~/selenium-server-standalone-2.53.1.jar /usr/local/share/; \
+    chmod +x /usr/local/share/selenium-server-standalone-2.53.1.jar; \
+    ln -s /usr/local/share/selenium-server-standalone-2.53.1.jar /usr/local/bin/selenium-server-standalone-2.53.1.jar
 
-RUN mv -f ~/selenium-server-standalone-2.53.1.jar /usr/local/share/
-RUN chmod +x /usr/local/share/selenium-server-standalone-2.53.1.jar
-RUN ln -s /usr/local/share/selenium-server-standalone-2.53.1.jar /usr/local/bin/selenium-server-standalone-2.53.1.jar
-
-RUN echo "#!/usr/bin/env bash" >> /usr/local/bin/selenium-server
-RUN echo "java -jar /usr/local/share/selenium-server-standalone-2.53.1.jar -Dwebdriver.firefox.bin=$GOCEPT_WEBDRIVER_FF_BINARY" >> /usr/local/bin/selenium-server
-RUN chmod +x /usr/local/bin/selenium-server
+RUN echo "#!/usr/bin/env bash" >> /usr/local/bin/selenium-server; \
+    echo "java -jar /usr/local/share/selenium-server-standalone-2.53.1.jar -Dwebdriver.firefox.bin=$GOCEPT_WEBDRIVER_FF_BINARY" >> /usr/local/bin/selenium-server; \
+    chmod +x /usr/local/bin/selenium-server
 
 RUN pip install tox
 
 
-RUN echo "selenium-server &" >> /root/.bashrc
-RUN echo "Xvfb :99 -ac &" >> /root/.bashrc
+RUN echo "selenium-server &" >> /root/.bashrc; \
+    echo "Xvfb :99 -ac &" >> /root/.bashrc
 
 # Create dirs and users
 RUN mkdir -p /opt/atlassian/bitbucketci/agent/build \
