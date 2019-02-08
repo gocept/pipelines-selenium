@@ -1,5 +1,25 @@
 Pipeline Selenium
 =================
 
-This repository can setup a docker image, which includes a python stack, 
-firefox and selenium ready for running wi bitbucket pipelines. 
+This repository can setup a docker image, which includes a python stack,
+firefox and selenium ready for running with bitbucket pipelines.
+
+
+Build the image
+---------------
+
+To build the image::
+
+    $ docker build -t gocept/pipelines-selenium .
+
+
+Local test run
+--------------
+
+Run the container with a source repository (here gocept.selenium) mounted on a
+local machine::
+
+    $ docker run -it --volume=/path/to/gocept.selenium:/gocept.selenium \
+      --workdir="/gocept.selenium" gocept/pipelines-selenium
+
+Test can be run with using ``tox`` now.
