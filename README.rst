@@ -23,3 +23,16 @@ local machine::
       --workdir="/gocept.selenium" gocept/pipelines-selenium
 
 Test can be run with using ``tox`` now.
+
+
+Versions
+--------
+
+1.0
++++
+
+This version includes:
+
+    - Firefox 45.0
+    - Selenium Server 2.53.1
+    - tox
