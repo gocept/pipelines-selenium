@@ -14,6 +14,12 @@ RUN apt-get update \
         zip \
         firefox \
         chromium-browser \
+        software-properties-common \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean -y
+
+RUN add-apt-repository ppa:deadsnakes/ppa -y -u \
+    && apt-get install python3.7 -y \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean -y
 
