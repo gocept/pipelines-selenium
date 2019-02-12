@@ -34,7 +34,9 @@ This version is backwards incompatible to 1.0 as it includes no selenium server
 but:
 
     - Current Firefox version
-    - Gecko driver to enable webdriver control
+    - Gecko driver (0.24.0) to enable webdriver control
+    - Current Chromium version
+    - Chrome driver (2.46) to enable webdriver control
     - Xvfb to run the tests in this buffer.
     - tox
 
