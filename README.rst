@@ -39,6 +39,7 @@ but:
     - Chrome driver (2.46) to enable webdriver control
     - Xvfb to run the tests in this buffer.
     - tox
+    - Python in the versions of 2.7, 3.5 and 3.7
 
 1.0
 +++
