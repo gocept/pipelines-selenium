@@ -16,7 +16,8 @@ RUN apt-get update \
         chromium-browser \
         software-properties-common \
     && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean -y
+    && apt-get clean -y \
+    && echo 'CHROMIUM_FLAGS="--no-sandbox"' > /etc/chromium-browser/default
 
 RUN add-apt-repository ppa:deadsnakes/ppa -y -u \
     && apt-get install python3.7 -y \
